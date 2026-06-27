@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>База Знань: Навігатор Дій</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; background: #f8f9fa; color: #212529; padding: 30px; }
+    .card { max-width: 720px; margin: 0 auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+    h1 { color: #0056b3; border-bottom: 2px solid #0056b3; padding-bottom: 8px; font-size: 22px; }
+    h2 { font-size: 16px; margin-top: 22px; color: #111; font-weight: bold; }
+    .zone { padding: 10px; margin: 8px 0; border-left: 4px solid #0056b3; background: #f1f3f5; font-size: 13.5px; }
+    .free-badge { background: #28a745; color: white; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; }
+    .price-block { background: #fff5f5; border: 1px solid #feb2b2; padding: 15px; border-radius: 6px; margin-top: 20px; font-size: 13px; }
+    .grid-audience { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0; }
+    .audience-card { background: #fdfdfd; border: 1px solid #e2e8f0; padding: 10px; border-radius: 6px; font-size: 13px; }
+    .architecture-box { background: #f0fdf4; border: 1px solid #bbf7d0; padding: 12px; border-radius: 6px; margin: 15px 0; font-size: 13.5px; }
+    .test-zone { background: #fffdf3; border: 1px solid #ffeeba; padding: 12px; border-radius: 6px; margin: 15px 0; }
+    .text-to-copy { background: white; border: 1px dashed #ccc; padding: 8px; font-style: italic; font-size: 12.5px; margin-bottom: 8px; }
+    .btn-copy { background: #6c757d; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+
+    /* СТИЛІ ОНЛАЙН-СИМУЛЯТОРА РОЗШИРЕННЯ */
+    .simulator-container {
+      max-width: 360px;
+      margin: 25px auto;
+      border: 3px solid #0056b3;
+      border-radius: 8px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      background-color: #f8f9fa;
+      color: #212529;
+      padding: 15px;
+    }
+    .header-title {
+      font-size: 13px;
+      font-weight: bold;
+      color: #111;
+      text-align: center;
+      margin-bottom: 12px;
+      border-bottom: 2px solid #0056b3;
+      padding-bottom: 6px;
+      text-transform: uppercase;
+    }
+    .strategy-container { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+    .strategy-card { background: #ffffff; border: 1px solid #dee2e6; border-radius: 6px; padding: 10px; }
+    .card-title { font-weight: bold; font-size: 12px; margin-bottom: 3px; display: block; }
+    .editor-zone { border-left: 5px solid #007bff; color: #007bff; }
+    .resources-zone { border-left: 5px solid #28a745; color: #28a745; }
+    .services-zone { border-left: 5px solid #fd7e14; color: #fd7e14; }
+    .card-desc { font-size: 11px; color: #666; line-height: 1.3; }
+    .detector-box { display: none; background: #fff; border: 1px solid #ced4da; border-radius: 6px; padding: 12px; margin-bottom: 12px; text-align: center; }
+    .detector-title { font-size: 12px; font-weight: bold; color: #495057; margin-bottom: 6px; display: block; }
+    .percentage { font-size: 24px; font-weight: bold; color: #dc3545; margin-bottom: 6px; }
+    .progress-bar-bg { background: #e9ecef; border-radius: 4px; height: 10px; width: 100%; overflow: hidden; margin-bottom: 8px; }
+    .progress-bar-fill { background: #dc3545; height: 100%; width: 0%; transition: width 0.5s ease-out; }
+    .detector-status { font-size: 11px; color: #6c757d; font-style: italic; }
+    .work-zone { background: #fff; border: 1px solid #ced4da; border-radius: 6px; padding: 12px; }
+    textarea { width: 100%; height: 60px; box-sizing: border-box; border: 1px solid #dee2e6; border-radius: 4px; padding: 8px; font-size: 12px; resize: none; font-family: inherit; }
+    .btn-action { width: 100%; padding: 10px; background: #0056b3; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 8px; font-size: 12px; }
+    .btn-action:hover { background: #004085; }
+    .deadlock-box { margin-top: 12px; background: #fffdf3; border: 1px solid #ffeeba; border-radius: 6px; padding: 10px; }
+    .btn-gold { width: 100%; padding: 8px; background: #ffc107; color: #212529; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 12px; }
+    .workflow-panel { display: none; margin-top: 10px; font-size: 11px; }
+    .btn-email { width: 100%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 4px; font-weight: bold; margin-top: 8px; cursor: pointer; }
+    .btn-email:disabled { background: #ccc; cursor: not-allowed; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>💎 Ментально-когнітивна заплутаність: вихід із тупика!</h1>
+    <p>Ви використовуєте автономний <strong>Фільтр Сенсу</strong> — інструмент дефрагментації стратегій та мислення.</p>
+
+    <!-- ОНЛАЙН-СИМУЛЯТОР РОЗШИРЕННЯ ДЛЯ ЕКСПЕРТІВ BRAVE1 -->
+    <h2 style="color: #dc3545; text-align: center; margin-top: 25px;">📱 ІНТЕРАКТИВНИЙ ДЕМО-СТЕНД РОЗШИРЕННЯ</h2>
+    <p style="text-align: center; font-size: 13px; color: #555; margin-top: -5px;">(Нижче представлено повну копію інтерфейсу розширення для тестування без встановлення в браузер)</p>
+    
+    <div class="simulator-container">
+      <div class="header-title">
+        💎 Ментально-когнітивна заплутаність: вихід із тупика!
+      </div>
+
+      <div class="strategy-container">
+        <div class="strategy-card editor-zone">
+          <span class="card-title">✏️ Редактор (Задум)</span>
+          <span class="card-desc">Повноваження проектування та функціональності.</span>
+        </div>
+        <div class="strategy-card resources-zone">
+          <span class="card-title">📚 Ресурси (Важелі)</span>
+          <span class="card-desc">Зовнішні вимоги, обмеження та правила гри.</span>
+        </div>
+        <div class="strategy-card services-zone">
+          <span class="card-title">🌐 Сервіси (Можливості)</span>
+          <span class="card-desc">Простір безпосередньої дії та інструментів.</span>
+        </div>
+      </div>
+
+      <div id="detectorBox" class="detector-box">
+        <span class="detector-title">📊 Рівень когнітивної заплутаності інформації:</span>
+        <div id="percentageText" class="percentage">0%</div>
+        <div class="progress-bar-bg">
+          <div id="progressBarFill" class="progress-bar-fill"></div>
+        </div>
+        <div id="detectorStatus" class="detector-status">Аналіз структури...</div>
+      </div>
+
+      <div class="work-zone">
+        <textarea id="rawInput" placeholder="Встав сюди свій текст, потік думок або інструкції..."></textarea>
+        <button id="processBtn" class="btn-action">⚡ ВИМІРЯТИ РІВЕНЬ ХАОСУ</button>
+      </div>
+
+      <div class="deadlock-box">
+        <button id="activateInjectionBtn" class="btn-gold">🔴 Зв'язки розірвані? Пакет «Ін'єкція» (500 UAH)</button>
+        
+        <div id="workflowPanel" class="workflow-panel">
+          <p style="margin: 5px 0; color: #666;">1. Сплатіть за реквізитами в Оферті.<br>2. Підтвердіть галочкою:</p>
+          <label style="display: flex; align-items: center; margin: 8px 0; cursor: pointer;">
+            <input type="checkbox" id="payConfirmCheck">
+            <span style="margin-left: 6px;">Я оплатив та підготував квитанцію</span>
+          </label>
+          <button id="sendEmailBtn" class="btn-email" disabled>📧 Передати контекст Борису Петровичу</button>
+        </div>
+      </div>
+    </div>
+    <!-- КІНЕЦЬ СИМУЛЯТОРУ -->
+
+    <div class="test-zone">
+      <strong style="font-size: 13px; color: #856404;">📋 ТЕСТ-ТРЕНАЖЕР СЕНСУ (Скопіюй для перевірки в онлайн-модулі вище):</strong>
+      <p style="font-size: 12px; margin: 4px 0;"><strong>Приклад 1 (Хаос — покаже ~75%):</strong></p>
+      <div class="text-to-copy" id="t1">Короткий зміст Мені потрібна людина, яка допоможе мені використовувати інструменти штучного інтелекту для виконання завдань. Робота включає налаштування та керування інструментами штучного інтелекту для автоматизаціїпроцесів, підвищення ефективності та підтримки щоденних операцій. Це неповний робочий день, постійний проект для людини, яка може працювати самостійно та чітко спілкуватися.</div>
+      <button class="btn-copy" onclick="navigator.clipboard.writeText(document.getElementById('t1').innerText); alert('Хаос скопійовано! Встав його в поле симулятора вище.');">Скопіювати Хаос</button>
+      
+      <p style="font-size: 12px; margin: 10px 0 4px 0;"><strong>Приклад 2 (Допустимість — покаже ~45%):</strong></p>
+      <div class="text-to-copy" id="t2">Задум: Створити телеграм-бота для автоматичного приймання замовлень на дефрагментацію текстів. Його головна функція — приймати текстові файли, реєструвати заявку в базі та видавати користувачу унікальний номер замовлення. Вимоги та правила гри: Проект має бути реалізований на мові Python з використанням бібліотеки aiogram 3.x. База даних — SQLite. Термін виконання роботи — 7 днів. Бюджет проекту фіксований — 4000 грн. Робота вважається виконаною після успішного тестування бота на нашому сервері. Сервіси та інструменти дій: Розробник отримає доступ до серверові через SSH, готовий API-токен від BotFather та чистий репозиторій на GitHub для розгортання коду.</div>
+      <button class="btn-copy" style="background:#28a745;" onclick="navigator.clipboard.writeText(document.getElementById('t2').innerText); alert('Чіткий текст скопійовано! Встав його в поле симулятора вище.');">Скопіювати Структуру</button>
+    </div>
+
+    <h2>🎯 Для кого цей інструмент є критично важливим?</h2>
+    <div class="grid-audience">
+      <div class="audience-card">
+        <strong>💻 Фрілансерам та Виконавцям:</strong><br>
+        Щоб миттєво тестувати ТЗ та вакансії на адекватність замовника. Захищає нерви від токсичного хаосу ще до початку роботи.
+      </div>
+      <div class="audience-card">
+        <strong>👔 Підприємцям та Менеджерам:</strong><br>
+        Щоб перевіряти власні думки та інструкції перед відправкою команді й не писати дурниць своїм працівникам.
+      </div>
+      <div class="audience-card" style="grid-column: span 2; border-left: 3px solid #dc3545; background: #fff5f5;">
+        <strong>⚙️ Працівникам та Підлеглим (Тест на фаховість керівництва):</strong><br>
+        Вставте розпорядження чи задачу від керівника. Навігатор чітко покаже, чи спроможний ваш шеф формувати чіткі вказівки, чи він просто перекладає свій внутрішній хаос на ваші плечі.
+      </div>
+    </div>
+
+    <h2>🧠 Чому стандартні текстові аналізатори тут безсилі?</h2>
+    <p style="font-size: 13.5px; color: #4a5568;">
+      Це не сервіс перевірки орфографії чи стилістики. Це інструмент оцінки мислення та зв'язку між <strong>Транслятором</strong> (автором думки) та <strong>Виконавцем</strong> (людиною чи ШІ), які тепер можуть перевірити себе та один одного на предмет логічних розривів.
+    </p>
+
+    <div class="architecture-box">
+      <strong>⚙️ Модель системи: [Транслятор] ➡️ [Виконавець]</strong>
+      <p style="margin: 5px 0; color: #234e32;">
+        Цифровий індикатор видає <strong>умовні відсотки заплутаності</strong> на основі щільності маркерів хаосу. Це первинний діагноз, який показує, чи заблоковано ваш задум шумом.
+      </p>
+    </div>
+
+    <h2>📊 Правила діагностики хаосу <span class="free-badge">Безкоштовно</span></h2>
+    <p>Аналіз тексту виконується локально за трьома базовими векторами:</p>
+    
+    <div class="zone" style="border-left-color: #007bff;"><strong>✏️ Редактор (Задум)</strong> — Що саме створюється та яка його функціональність.</div>
+    <div class="zone" style="border-left-color: #28a745;"><strong>📚 Ресурси (Важелі)</strong> — Зовнішні вимоги, закони, оферти, ліміти та правила гри.</div>
+    <div class="zone" style="border-left-color: #fd7e14;"><strong>🌐 Сервіси (Можливості)</strong> — Платформи, API та інструменти миттєвої дії у браузері.</div>
+
+    <div class="price-block">
+      <strong style="color: #c53030; font-size: 14px;">🔴 Повна дефрагментація заплутаності — вручную:</strong>
+      <p style="margin: 5px 0;">Оскільки автоматика може лише зафіксувати аномалію, відновлення архітектури зв'язків та очищення сенсів завжди виконується індивідуально.</p>
+      <p style="margin: 5px 0;"><strong>Замовляйте дефрагментацію своєї заплутаності (Пакет «Ін'єкція»):</strong> 500 UAH. Після підтвердження оплати за реквізитами в Оферті весь ваш неструктурований контекст передається Борису Петровичу для примусового виходу з когнітивного тупика.</p>
+    </div>
+  </div>
+
+  <!-- АДАПТОВАНИЙ СКРИПТ ПОП-АПУ ДЛЯ РОБОТИ НА ВЕБ-СТОРІНЦІ -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const rawInput = document.getElementById('rawInput');
+      const processBtn = document.getElementById('processBtn');
+      
+      const detectorBox = document.getElementById('detectorBox');
+      const percentageText = document.getElementById('percentageText');
+      const progressBarFill = document.getElementById('progressBarFill');
+      const detectorStatus = document.getElementById('detectorStatus');
+
+      const activateInjectionBtn = document.getElementById('activateInjectionBtn');
+      const workflowPanel = document.getElementById('workflowPanel');
+      const payConfirmCheck = document.getElementById('payConfirmCheck');
+      const sendEmailBtn = document.getElementById('sendEmailBtn');
+
+      const targetEmail = "mr.karalyp@gmail.com";
+
+      // Безпечне відновлення галочки з localStorage сторінки
+      try {
+        const savedState = localStorage.getItem('isPaidChecked');
+        if (savedState === 'true') {
+          payConfirmCheck.checked = true;
+          sendEmailBtn.disabled = false;
+        }
+      } catch (e) {}
+
+      // Алгоритм обчислення відсотка заплутаності
+      processBtn.addEventListener('click', () => {
+        const text = rawInput.value.trim();
+        if (!text) {
+          alert("Поле порожнє! Встав текст для аналізу.");
+          return;
+        }
+
+        let chaosScore = 30;
+
+        if (text.length > 300) chaosScore += 15;
+        if (text.length > 800) chaosScore += 15;
+        
+        const lower = text.toLowerCase();
+        if (!lower.includes('задум') && !lower.includes('ціль')) chaosScore += 10;
+        if (!lower.includes('вимог') && !lower.includes('правила')) chaosScore += 10;
+        if (!lower.includes('дія') && !lower.includes('сервіс')) chaosScore += 10;
+
+        const exclamationCount = (text.match(/!/g) || []).length;
+        const questionCount = (text.match(/\?/g) || []).length;
+        chaosScore += (exclamationCount + questionCount) * 4;
+
+        if (chaosScore > 100) chaosScore = 100;
+        if (chaosScore < 10) chaosScore = 10;
+
+        percentageText.innerText = `${chaosScore}%`;
+        progressBarFill.style.width = `${chaosScore}%`;
+        
+        if (chaosScore < 45) {
+          progressBarFill.style.backgroundColor = "#28a745";
+          percentageText.style.color = "#28a745";
+          detectorStatus.innerText = "Структура в нормі. Можна діяти самостійно.";
+        } else if (chaosScore < 75) {
+          progressBarFill.style.backgroundColor = "#ffc107";
+          percentageText.style.color = "#ffc107";
+          detectorStatus.innerText = "Увага! Шум блокує задум. Потрібна параметризація.";
+        } else {
+          progressBarFill.style.backgroundColor = "#dc3545";
+          percentageText.style.color = "#dc3545";
+          detectorStatus.innerText = "Критичний рівень хаосу. Зв'язки сенсу спотворені.";
+        }
+
+        detectorBox.style.display = 'block';
+      });
+
+      // Керування панеллю евакуації
+      activateInjectionBtn.addEventListener('click', () => {
+        const isVisible = workflowPanel.style.display === 'block';
+        workflowPanel.style.display = isVisible ? 'none' : 'block';
+      });
+
+      payConfirmCheck.addEventListener('change', (e) => {
+        const isChecked = e.target.checked;
+        sendEmailBtn.disabled = !isChecked;
+        try { localStorage.setItem('isPaidChecked', isChecked ? 'true' : 'false'); } catch (err) {}
+      });
+
+      sendEmailBtn.addEventListener('click', () => {
+        if (!payConfirmCheck.checked) return;
+        const subject = encodeURIComponent("Замовлення: Вихід із когнітивного тупика (Пакет Ін'єкція)");
+        const body = encodeURIComponent(
+          "Вітаю, Борисе Петровичу!\n\nЗв'язки моєї структури спотворені. Навігатор виявив критичний рівень заплутаності.\n\nМій контекст:\n" + `"${rawInput.value}"`
+        );
+        window.location.href = `mailto:${targetEmail}?subject=${subject}&body=${body}`;
+      });
+    });
+  </script>
+</body>
+</html>
