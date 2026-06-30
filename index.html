@@ -67,6 +67,19 @@
     .workflow-panel { display: none; margin-top: 10px; font-size: 11px; }
     .btn-email { width: 100%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 4px; font-weight: bold; margin-top: 8px; cursor: pointer; }
     .btn-email:disabled { background: #ccc; cursor: not-allowed; }
+
+    /* МОДАЛЬНЕ ВІКНО ВИБОРУ ПОШТИ */
+    .email-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+    .modal-content { background: white; padding: 20px; border-radius: 8px; max-width: 340px; width: 90%; box-shadow: 0 4px 15px rgba(0,0,0,0.2); text-align: center; }
+    .modal-title { font-size: 14px; font-weight: bold; margin-bottom: 12px; color: #111; }
+    .modal-btn { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 12px; transition: background 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-gmail { background: #fff5f5; color: #c53030; border-color: #feb2b2; }
+    .btn-gmail:hover { background: #fed7d7; }
+    .btn-outlook { background: #ebf8ff; color: #2b6cb0; border-color: #bee3f8; }
+    .btn-outlook:hover { background: #cee3f8; }
+    .btn-manual { background: #f7fafc; color: #4a5568; }
+    .btn-manual:hover { background: #edf2f7; }
+    .btn-close-modal { background: #e2e8f0; color: #4a5568; border: none; margin-top: 10px; font-size: 11px; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
     
     @media (max-width: 600px) {
       body { padding: 10px; }
@@ -97,7 +110,7 @@
       <div class="strategy-container">
         <div class="strategy-card editor-zone">
           <span class="card-title" data-key="titleEditor">✏️ Редактор (Задум)</span>
-          <span class="card-desc" data-key="descEditor">Повноваження проектування та функціональності.</span>
+          <span class="card-desc" data-key="descEditor">Повноваження проектування та funktionальності.</span>
         </div>
         <div class="strategy-card resources-zone">
           <span class="card-title" data-key="titleRes">📚 Ресурси (Важелі)</span>
@@ -134,6 +147,17 @@
           </label>
           <button id="sendEmailBtn" class="btn-email" disabled data-key="btnEmail">📧 Передати контекст Борису Петровичу</button>
         </div>
+      </div>
+    </div>
+
+    <!-- Спливаюче вікно вибору пошти -->
+    <div id="emailModal" class="email-modal">
+      <div class="modal-content">
+        <div class="modal-title" id="modalTitle">Оберіть спосіб відправки пошти:</div>
+        <button class="modal-btn btn-gmail" id="modalGmailBtn">🔴 Відкрити через веб-Gmail</button>
+        <button class="modal-btn btn-outlook" id="modalOutlookBtn">🔵 Через Outlook / Додаток пошти</button>
+        <button class="modal-btn btn-manual" id="modalManualBtn">📋 Просто скопіювати в буфер</button>
+        <button class="btn-close-modal" id="closeModalBtn" onclick="closeEmailModal()">Скасувати</button>
       </div>
     </div>
 
@@ -199,6 +223,7 @@
 
   <script>
     let currentLang = 'uk';
+    const targetEmail = "mr.karalyp@gmail.com";
 
     const dictionary = {
       uk: {
@@ -250,11 +275,17 @@
         priceDesc1: "Оскільки автоматика може лише зафіксувати аномалію, відновлення архітектури зв'язків та очищення сенсів завжди виконується індивідуально.",
         priceDesc2: "<strong>Замовляйте дефрагментацію своєї заплутаності (Пакет «Ін'єкція»):</strong> 500 UAH. Після підтвердження оплати за реквізитами в Оферті весь ваш неструктурований контекст передається Борису Петровичу для примусового виходу з когнітивного тупика.",
         alertEmpty: "Поле порожнє! Встав текст для аналізу.",
-        statusLow: "Структура в нормі. Можна діяти самостійно.",
-        statusMid: "Увага! Шум блокує задум. Потрібна параметризація.",
-        statusHigh: "Критичний рівень хаосу. Зв'язки сенсу спотворені.",
+        statusLow: "Structure looks solid. Safe for autonomous execution.",
+        statusMid: "Warning! Contextual noise blocks intent. Parametrization required.",
+        statusHigh: "Critical chaos level. Conceptual integrity severely distorted.",
+        modalTitle: "Оберіть спосіб відправки пошти:",
+        mGmail: "🔴 Відкрити через веб-Gmail",
+        mOutlook: "🔵 Через Outlook / Додаток пошти",
+        mManual: "📋 Просто скопіювати текст у буфер",
+        mCancel: "Скасувати",
+        copiedNotify: "Дані скопійовано! Надішліть їх на mr.karalyp@gmail.com самостійно.",
         t1Text: "Короткий зміст Мені потрібна людина, яка допоможе мені використовувати інструменти штучного інтелекту для виконання завдань. Робота включає налаштування та керування інструментами штучного інтелекту для автоматизаціїпроцесів, підвищення ефективності та підтримки щоденних операцій. Це неповний робочий день, постійний проект для людини, яка може працювати самостійно та чітко спілкуватися.",
-        t2Text: "Задум: Створити телеграм-бота для автоматичного приймання замовлень на дефрагментацію текстів. Його головна функція — приймати текстові файли, реєструвати заявку в базі та видавати користувачу унікальний номер замовлення. Вимоги та правила гри: Проект має бути реалізований на мові Python з використанням бібліотеки aiogram 3.x. База даних — SQLite. Термін виконання роботи — 7 днів. Бюджет проекту фіксований — 4000 грн. Робота вважається виконаною після успішного тестування бота на нашому сервері. Сервіси та інструменти дій: Розробник отримає доступ до серверові через SSH, готовий API-токен від BotFather та чистий репозиторій на GitHub для розгортання коду."
+        t2Text: "Задум: Створити телеграм-бота для автоматичного приймання замовлень на дефрагментацію текстів. Його головна функція — приймати текстові файли, реєструвати заявку в базі та видавати користувачу унікальний номер замовлення. Вимоги та правила гри: Проект має быть реалізований на мові Python з використанням бібліотеки aiogram 3.x. База даних — SQLite. Термін виконання роботи — 7 днів. Бюджет проекту фіксований — 4000 грн. Робота вважається виконаною після успішного тестування бота на нашому сервері. Сервіси та інструменти дій: Розробник отримає доступ до серверові через SSH, готовий API-токен від BotFather та чистий репозиторій на GitHub для розгортання коду."
       },
       en: {
         metaTitle: "Knowledge Base: Action Navigator",
@@ -308,6 +339,12 @@
         statusLow: "Structure looks solid. Safe for autonomous execution.",
         statusMid: "Warning! Contextual noise blocks intent. Parametrization required.",
         statusHigh: "Critical chaos level. Conceptual integrity severely distorted.",
+        modalTitle: "Choose your preferred email client:",
+        mGmail: "🔴 Open via Web Gmail",
+        mOutlook: "🔵 Via Outlook / Native Mail App",
+        mManual: "📋 Copy raw text to Clipboard",
+        mCancel: "Cancel",
+        copiedNotify: "Data copied to clipboard! Please send it to mr.karalyp@gmail.com manually.",
         t1Text: "Summary Content I need a person who will help me use AI tools to complete tasks. Work includes configuring and managing artificial intelligence tools to automate processes, increase efficiency, and support daily operations. This is a part-time, long term project for an individual who can work independently and communicate clearly.",
         t2Text: "Intent: Build a Telegram bot for automatic intake of text defragmentation orders. Main feature: accept raw text files, log the request in a database, and return a unique order ID to the user. Levers and Constraints: Project must be written in Python using aiogram 3.x. Database - SQLite. Delivery timeframe - 7 days. Fixed budget - 4000 UAH. Definition of Done: successful smoke tests of the bot on our staging environment. Capabilities and Tooling: Developer receives SSH credentials to our staging server, an active BotFather API token, and a clean GitHub repo for deployment."
       }
@@ -316,14 +353,19 @@
     function switchLanguage(lang) {
       currentLang = lang;
       
-      // Оновлення кнопок перемикача
       document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
       event.target.classList.add('active');
       
-      // Переклад за ключами
       document.getElementById('metaTitle').innerText = dictionary[lang].metaTitle;
       document.getElementById('rawInput').placeholder = dictionary[lang].placeholderText;
       
+      // Переклад модалки
+      document.getElementById('modalTitle').innerText = dictionary[lang].modalTitle;
+      document.getElementById('modalGmailBtn').innerText = dictionary[lang].mGmail;
+      document.getElementById('modalOutlookBtn').innerText = dictionary[lang].mOutlook;
+      document.getElementById('modalManualBtn').innerText = dictionary[lang].mManual;
+      document.getElementById('closeModalBtn').innerText = dictionary[lang].mCancel;
+
       document.querySelectorAll('[data-key]').forEach(el => {
         const key = el.getAttribute('data-key');
         if (dictionary[lang][key]) {
@@ -331,11 +373,9 @@
         }
       });
 
-      // Перезапис прикладів у тренажері
       document.getElementById('t1').innerText = dictionary[lang].t1Text;
       document.getElementById('t2').innerText = dictionary[lang].t2Text;
 
-      // Скидання або перерахунок стану детектора при зміні мови
       const detectorBox = document.getElementById('detectorBox');
       if (detectorBox.style.display === 'block') {
         document.getElementById('processBtn').click();
@@ -347,6 +387,10 @@
       navigator.clipboard.writeText(text);
       const msg = currentLang === 'uk' ? 'Скопійовано! Встав його в поле симулятора вище.' : 'Copied! Paste it into the simulator input field above.';
       alert(msg);
+    }
+
+    function closeEmailModal() {
+      document.getElementById('emailModal').style.display = 'none';
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -363,7 +407,11 @@
       const payConfirmCheck = document.getElementById('payConfirmCheck');
       const sendEmailBtn = document.getElementById('sendEmailBtn');
 
-      const targetEmail = "mr.karalyp@gmail.com";
+      // Елементи модалки
+      const emailModal = document.getElementById('emailModal');
+      const modalGmailBtn = document.getElementById('modalGmailBtn');
+      const modalOutlookBtn = document.getElementById('modalOutlookBtn');
+      const modalManualBtn = document.getElementById('modalManualBtn');
 
       try {
         const savedState = localStorage.getItem('isPaidChecked');
@@ -381,13 +429,10 @@
         }
 
         let chaosScore = 30;
-
         if (text.length > 300) chaosScore += 15;
         if (text.length > 800) chaosScore += 15;
         
         const lower = text.toLowerCase();
-        
-        // Перевірка на ключові маркери структури обома мовами
         const hasIntent = lower.includes('задум') || lower.includes('ціль') || lower.includes('intent') || lower.includes('goal');
         const hasRules = lower.includes('вимог') || lower.includes('правила') || lower.includes('constraint') || lower.includes('rule') || lower.includes('lever');
         const hasActions = lower.includes('дія') || lower.includes('сервіс') || lower.includes('action') || lower.includes('service') || lower.includes('capability');
@@ -434,15 +479,44 @@
         try { localStorage.setItem('isPaidChecked', isChecked ? 'true' : 'false'); } catch (err) {}
       });
 
+      // При натисканні головної кнопки — відкриваємо модалку з вибором клієнта
       sendEmailBtn.addEventListener('click', () => {
         if (!payConfirmCheck.checked) return;
-        
+        emailModal.style.display = 'flex';
+      });
+
+      // ГЕНЕРАЦІЯ ДАНИХ ДЛЯ ЛИСТА
+      function getMailData() {
         const subjText = currentLang === 'uk' ? "Замовлення: Вихід із когнітивного тупика (Пакет Ін'єкція)" : "Order: Escaping Cognitive Deadlock ('Injection' Bundle)";
         const bodyLead = currentLang === 'uk' ? "Вітаю, Борисе Петровичу!\n\nЗв'язки моєї структури спотворені. Навігатор виявив високий рівень заплутаності.\n\nМій контекст:\n" : "Hello Boris Petrovich!\n\nMy structural nodes are corrupted. The Navigator detected elevated entanglement levels.\n\nMy raw context:\n";
+        return {
+          subject: subjText,
+          body: bodyLead + `"${rawInput.value}"`
+        };
+      }
 
-        const subject = encodeURIComponent(subjText);
-        const body = encodeURIComponent(bodyLead + `"${rawInput.value}"`);
-        window.location.href = `mailto:${targetEmail}?subject=${subject}&body=${body}`;
+      // КНОПКА 1: ЧИСТИЙ ВЕБ-GMAIL (Оминає додатки)
+      modalGmailBtn.addEventListener('click', () => {
+        const data = getMailData();
+        const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${targetEmail}&su=${encodeURIComponent(data.subject)}&body=${encodeURIComponent(data.body)}`;
+        window.open(gmailUrl, '_blank');
+        closeEmailModal();
+      });
+
+      // КНОПКА 2: СИСТЕМНИЙ OUTLOOK / MAILTO (Для тих, хто користується додатками)
+      modalOutlookBtn.addEventListener('click', () => {
+        const data = getMailData();
+        window.location.href = `mailto:${targetEmail}?subject=${encodeURIComponent(data.subject)}&body=${encodeURIComponent(data.body)}`;
+        closeEmailModal();
+      });
+
+      // КНОПКА 3: РУЧНЕ КОПІЮВАННЯ (Залізобетонний варіант)
+      modalManualBtn.addEventListener('click', () => {
+        const data = getMailData();
+        const fullText = `To: ${targetEmail}\nSubject: ${data.subject}\n\n${data.body}`;
+        navigator.clipboard.writeText(fullText);
+        alert(dictionary[currentLang].copiedNotify);
+        closeEmailModal();
       });
     });
   </script>
