@@ -133,7 +133,26 @@
           <span class="card-title" data-key="titleEditor">✏️ Редактор (Задум)</span>
           <span class="card-desc" data-key="descEditor">Повноваження проектування та funktionальності.</span>
         </div>
-        <div class="strategy-card resources-zone">
+        <div class="strategy-card resources-zone"style={.strategy-card.resources-zone {
+    position: relative; 
+    padding-right: 140px; /* Додаємо відступ справа, щоб заголовок не налізав на маркер */
+}
+
+.micro-ai-badge {
+    position: absolute;
+    top: 15px;            /* Відступ від верхнього краю картки */
+    right: 15px;          /* Відступ від правого краю картки */
+    margin: 0;            /* Скидаємо зайві маргіни */
+    font-size: 14px;      /* Трохи менший розмір, щоб виглядало як акуратна лейба */
+    font-weight: 700;
+    color: #000000;
+    display: inline-flex;
+    align-items: center;
+}
+
+.lightning-bolt {
+    color: #FFD700;
+    margin-right: 4px;}>
           <div class="micro-ai-badge">
               <span class="lightning-bolt">⚡</span> маленький ші
             </div>
