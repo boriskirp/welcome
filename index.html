@@ -45,6 +45,27 @@
     /* СТИЛІ ОНЛАЙН-СИМУЛЯТОРУ */
     .simulator-container { max-width: 360px; margin: 25px auto; border: 3px solid #0056b3; border-radius: 8px; box-shadow: 0 6px 20px rgba(0,0,0,0.15); background-color: #f8f9fa; color: #212529; padding: 15px; }
     .header-title { font-size: 13px; font-weight: bold; color: #111; text-align: center; margin-bottom: 12px; border-bottom: 2px solid #0056b3; padding-bottom: 6px; text-transform: uppercase; }
+     /* Батьківська картка має бути relative, щоб маркер не вилетів за її межі */
+.strategy-card.resources-zone {
+    position: relative; 
+    padding-right: 140px; /* Додаємо відступ справа, щоб заголовок не налізав на маркер */
+}
+
+.micro-ai-badge {
+    position: absolute;
+    top: 15px;            /* Відступ від верхнього краю картки */
+    right: 15px;          /* Відступ від правого краю картки */
+    margin: 0;            /* Скидаємо зайві маргіни */
+    font-size: 14px;      /* Трохи менший розмір, щоб виглядало як акуратна лейба */
+    font-weight: 700;
+    color: #000000;
+    display: inline-flex;
+    align-items: center;
+}
+
+.lightning-bolt {
+    color: #FFD700;
+    margin-right: 4px;
     .strategy-container { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
     .strategy-card { background: #ffffff; border: 1px solid #dee2e6; border-radius: 6px; padding: 10px; }
     .card-title { font-weight: bold; font-size: 12px; margin-bottom: 3px; display: block; }
@@ -113,6 +134,9 @@
           <span class="card-desc" data-key="descEditor">Повноваження проектування та funktionальності.</span>
         </div>
         <div class="strategy-card resources-zone">
+          <div class="micro-ai-badge">
+              <span class="lightning-bolt">⚡</span> маленький ші
+            </div>
           <span class="card-title" data-key="titleRes">📚 Ресурси (Важелі)</span>
           <span class="card-desc" data-key="descRes">Зовнішні вимоги, обмеження та правила гри.</span>
         </div>
