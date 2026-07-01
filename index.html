@@ -114,32 +114,16 @@
           <span class="card-title" data-key="titleEditor">✏️ Редактор (Задум)</span>
           <span class="card-desc" data-key="descEditor">Повноваження проектування та funktionальності.</span>
         </div>
-        <div class="strategy-card resources-zone"style={.strategy-card.resources-zone {
-    position: relative; 
-    padding-right: 15px; /* Додаємо відступ справа, щоб заголовок не налізав на маркер */
-}
+       <div class="strategy-card resources-zone" style="position: relative; padding-right: 110px;">
+  
+  <!-- Автономний маркер micro-AI, який завжди буде праворуч і чорним -->
+  <div style="position: absolute; top: 10px; right: 12px; margin: 0; font-size: 13px; font-weight: 700; color: #000000; display: inline-flex; align-items: center; line-height: 1;">
+    <span style="color: #FFD700; margin-right: 4px;">⚡</span>micro-AI
+  </div>
 
-.micro-ai-badge {
-    position: absolute;
-    top: 15px;            /* Відступ від верхнього краю картки */
-    right: 15px;          /* Відступ від правого краю картки */
-    margin: 0;            /* Скидаємо зайві маргіни */
-    font-size: 14px;      /* Трохи менший розмір, щоб виглядало як акуратна лейба */
-    font-weight: 700;
-    color: #000000;
-    display: inline-flex;
-    align-items: center;
-}
-
-.lightning-bolt {
-    color: #FFD700;
-    margin-right: 4px;}>
-          <div class="micro-ai-badge">
-              <span class="lightning-bolt">⚡</span> micro-AI
-            </div>
-          <span class="card-title" data-key="titleRes">📚 Ресурси (Важелі)</span>
-          <span class="card-desc" data-key="descRes">Зовнішні вимоги, обмеження та правила гри.</span>
-        </div>
+  <span class="card-title" data-key="titleRes">📚 Ресурси (Важелі)</span>
+  <span class="card-desc" data-key="descRes">Зовнішні вимоги, обмеження та правила гри.</span>
+</div>
         <div class="strategy-card services-zone">
           <span class="card-title" data-key="titleServ">🌐 Сервіси (Можливості)</span>
           <span class="card-desc" data-key="descServ">Простір безпосередньої дії та інструментів.</span>
